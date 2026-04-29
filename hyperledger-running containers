@@ -1,0 +1,9 @@
+Sudo apt update
+sudo apt install -y docker.io
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo apt install -y docker-compose or sudo apt install docker-compose-plugin……alias docker-
+compose=&#39;docker compose&#39;
+cd fabric-samples/test-network
+./network.sh up
+docker ps
