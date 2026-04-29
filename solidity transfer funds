@@ -1,0 +1,19 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract FundTransfer {
+
+    // Deposit money into contract
+    function deposit() public payable {}
+
+    // Check contract balance
+    function getBalance() public view returns (uint) {
+        return address(this).balance;
+    }
+
+    // Transfer funds to another address
+    function transferFunds(address payable _to, uint _amount) public {
+        require(address(this).balance >= _amount, "Insufficient balance");
+        _to.transfer(_amount);
+    }
+}
