@@ -1,0 +1,23 @@
+import hashlib
+
+# Original message
+message = "Hello World"
+
+# Hash the message
+hash_object = hashlib.sha256(message.encode())
+hashed_message = hash_object.hexdigest()
+
+print("Original Message:", message)
+print("SHA-256 Hash:", hashed_message)
+
+def verify_message(input_message, original_hash):
+    new_hash = hashlib.sha256(input_message.encode()).hexdigest()
+    return new_hash == original_hash
+
+# Test verification
+user_input = "Hello World"
+
+if verify_message(user_input, hashed_message):
+    print("Message Verified (matches original)")
+else:
+    print("Message Not Verified")
