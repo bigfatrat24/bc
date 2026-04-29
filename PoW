@@ -1,0 +1,64 @@
+import hashlib
+import time
+
+class Block:
+    def __init__(self, index, data, previous_hash):
+        self.index = index
+        self.data = data
+        self.previous_hash = previous_hash
+        self.nonce = 0
+        self.hash = ""
+
+    def calculate_hash(self):
+        content = f"{self.index}{self.data}{self.previous_hash}{self.nonce}"
+        return hashlib.sha256(content.encode()).hexdigest()
+
+    def mine(self, difficulty="00"):
+        start = time.time()
+        while True:
+            self.hash = self.calculate_hash()
+            if self.hash.startswith(difficulty):
+                break
+            self.nonce += 1
+        elapsed = time.time() - start
+        print(f" Block {self.index} mined in {elapsed:.2f}s - nonce: {self.nonce}")
+
+
+class Blockchain:
+    DIFFICULTY = "00"  # hash must start with "00"
+
+    def __init__(self):
+        self.chain = [self._create_genesis()]
+
+    def _create_genesis(self):
+        genesis = Block(0, "Genesis Block", "0" * 16)
+        genesis.mine(self.DIFFICULTY)
+        return genesis
+
+    def add_block(self, data):
+        prev = self.chain[-1]
+        block = Block(len(self.chain), data, prev.hash)
+        block.mine(self.DIFFICULTY)
+        self.chain.append(block)
+
+    def print_chain(self):
+        sep = "=" * 70
+        print(f"\n{sep}")
+        print(f"{'BLOCKCHAIN':^70}")
+        print(sep)
+        for b in self.chain:
+            print(f"\n Index         : {b.index}")
+            print(f" Data          : {b.data}")
+            print(f" Nonce         : {b.nonce}")
+            print(f" Previous Hash : {b.previous_hash}")
+            print(f" Hash          : {b.hash}")
+            print(f" {'-'*60}")
+        print(sep)
+
+
+# Run
+bc = Blockchain()
+bc.add_block("A -> B: 50 BTC")
+bc.add_block("B -> C: 30 BTC")
+bc.add_block("C -> D: 20 BTC")
+bc.print_chain()
