@@ -1,0 +1,43 @@
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.asymmetric import rsa, padding
+
+# Step 1: Generate keys
+private_key = rsa.generate_private_key(
+    public_exponent=65537,
+    key_size=2048
+)
+
+public_key = private_key.public_key()
+
+# Step 2: Take original input
+original_doc = input("Enter the original document/message: ").encode()
+
+# Step 3: Sign the document
+signature = private_key.sign(
+    original_doc,
+    padding.PSS(
+        mgf=padding.MGF1(hashes.SHA256()),
+        salt_length=padding.PSS.MAX_LENGTH
+    ),
+    hashes.SHA256()
+)
+
+print("\nDocument signed successfully!")
+
+# Step 4: Take input again for verification
+verify_doc = input("\nEnter the document again for verification: ").encode()
+
+# Step 5: Verify signature
+try:
+    public_key.verify(
+        signature,
+        verify_doc,
+        padding.PSS(
+            mgf=padding.MGF1(hashes.SHA256()),
+            salt_length=padding.PSS.MAX_LENGTH
+        ),
+        hashes.SHA256()
+    )
+    print("\nSignature Verified  (Document is authentic)")
+except:
+    print("\nVerification Failed  (Document has been altered)")
