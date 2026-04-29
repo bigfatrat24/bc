@@ -1,0 +1,11 @@
+import hashlib
+
+message = "Blockchain Developer"
+
+# Encode the string and compute SHA-256 digest
+hash_object = hashlib.sha256(message.encode('utf-8'))
+message_digest = hash_object.hexdigest()
+
+print(f"Message        : {message}")
+print(f"Hash Algorithm: SHA-256")
+print(f"Message Digest: {message_digest}")
